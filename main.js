@@ -9,11 +9,14 @@ function createWindow() {
         width: 800,
         height: 600,
         title: "Calculator",
+        titleBarStyle: 'hidden',
+        resizable: false,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
             nodeIntegration: true,
             contextIsolation: false
-        }
+        },
+        frame: false,  // No frame to make the whole window draggable
     });
 
     // Load the URL served by the .NET backend
