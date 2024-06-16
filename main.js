@@ -41,7 +41,7 @@ app.whenReady().then(() => {
   });
 
   // Delay to wait for the .NET backend to be ready
-  setTimeout(createWindow, 5000);
+  setTimeout(createWindow, 3000);
 });
 
 app.on('window-all-closed', () => {
