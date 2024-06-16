@@ -27,16 +27,13 @@ namespace CalculatorAppDotNet.Pages
         [ValidateAntiForgeryToken]
         public void OnPost(string number, string operation, string action, string calculate, string memoryAction, string currentDisplay)
         {
-            _logger.LogInformation("OnPost called. Number: {number}, Operation: {operation}, " 
-                                 + "Action: {action}, Calculate: {calculate}, " 
-                                 + "MemoryAction: {memoryAction}, CurrentDisplay: {currentDisplay}", 
-                                 number, operation, action, calculate, memoryAction, currentDisplay);
-
             // Preserve the current display value
             Display = currentDisplay;
 
             if (!string.IsNullOrEmpty(number))
             {
+                _logger.LogInformation("Number: {number}", number);
+
                 if (Display == "0")
                 {
                     Display = number;
@@ -49,19 +46,19 @@ namespace CalculatorAppDotNet.Pages
 
             if (!string.IsNullOrEmpty(operation))
             {
-                if (Display.EndsWith("×") || Display.EndsWith("÷") || Display.EndsWith("+") || Display.EndsWith("-"))
+                _logger.LogInformation("Operation: {operation}", operation);
+
+                // Add operation only if the last character is not an operation
+                if (!string.IsNullOrEmpty(Display) && !IsOperation(Display.Trim()[^1]))
                 {
-                    Display = Display.Substring(0, Display.Length - 1);
+                    Display += $" {operation} ";
                 }
-                else if (Display.EndsWith("."))
-                {
-                    Display = Display.Substring(0, Display.Length - 1);
-                }
-                Display += $" {operation} ";
             }
 
             if (!string.IsNullOrEmpty(action))
             {
+                _logger.LogInformation("Action: {action}", action);
+
                 if (action == "C")
                 {
                     Display = "0";
@@ -75,6 +72,8 @@ namespace CalculatorAppDotNet.Pages
 
             if (!string.IsNullOrEmpty(memoryAction))
             {
+                _logger.LogInformation("MemoryAction: {memoryAction}", memoryAction);
+
                 if (decimal.TryParse(Display, out decimal currentValue))
                 {
                     if (memoryAction == "M+")
@@ -94,6 +93,8 @@ namespace CalculatorAppDotNet.Pages
 
             if (!string.IsNullOrEmpty(calculate))
             {
+                _logger.LogInformation("Calculate: {calculate}", calculate);
+
                 try
                 {
                     Display = Calculate(Display).ToString();
@@ -103,6 +104,17 @@ namespace CalculatorAppDotNet.Pages
                     Display = "Error";
                 }
             }
+
+            // If the display is too long, truncate it
+            if (Display.Length > 20)
+            {
+                Display = Display.Substring(0, 20);
+            }
+        }
+
+        private bool IsOperation(char c)
+        {
+            return c == '+' || c == '-' || c == '*' || c == '/';
         }
 
         private decimal Calculate(string input)
