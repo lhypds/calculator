@@ -55,6 +55,7 @@ try {
   // Change the working directory to the 'publish' directory
   const publishDir = path.join(__dirname, 'publish');
   process.chdir(publishDir);
+  console.log(`Changed working directory to: ${publishDir}`);
 
   // Run electron-packager for the detected platform
   console.log(`Packaging for ${platformMap[platform]}...`);
