@@ -1,10 +1,26 @@
 const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 
 const filesToCopy = ['main.js', 'preload.js'];
 
 try {
+  // Detect the current platform
+  const platform = os.platform();
+  console.log(`Detected platform: ${platform}`);
+
+  // Map Node.js platform to electron-packager platform
+  const platformMap = {
+    win32: 'win32',
+    darwin: 'darwin',
+    linux: 'linux'
+  };
+
+  if (!platformMap[platform]) {
+    throw new Error(`Unsupported platform: ${platform}`);
+  }
+
   // Step 1: Publish the .NET application
   console.log('Publishing .NET application...');
   execSync('dotnet publish ./CalculatorAppDotNet -c Release -o ./publish/CalculatorAppDotNet', { stdio: 'inherit' });
@@ -40,8 +56,9 @@ try {
   const publishDir = path.join(__dirname, 'publish');
   process.chdir(publishDir);
 
-  // Run electron-packager with verbose logging
-  execSync('npx electron-packager . Calculator --platform=win32 --arch=x64 --overwrite --verbose', { stdio: 'inherit' });
+  // Run electron-packager for the detected platform
+  console.log(`Packaging for ${platformMap[platform]}...`);
+  execSync(`npx electron-packager . Calculator --platform=${platformMap[platform]} --arch=x64 --overwrite --verbose`, { stdio: 'inherit' });
 
   console.log('Build and packaging complete!');
 } catch (error) {

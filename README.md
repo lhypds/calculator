@@ -24,4 +24,5 @@ Run
 
 The built executables are located in the publish folder, e.g., Calculator-win32-x64.  
 On windows, run `Calculator.exe`  
+On macOS, drag and drop `Calculator` into Applications.  
 Press, `ESC` to quit application.  
