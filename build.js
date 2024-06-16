@@ -70,13 +70,15 @@ try {
 
   // Check if icon file exists
   if (!fs.existsSync(iconPath)) {
-    console.warn('Warning: icon.ico does not exist. The application will use the Electron default icon.');
+    console.warn('Warning: icon file does not exist. The application will use the Electron default icon.');
   } else {
-    console.log('Using custom icon.ico for the application...');
+    console.log('Using custom icon file for the application...');
   }
 
   // Run electron-packager
-  execSync(`npx @electron/packager . Calculator --platform=${platformMap[platform]} --arch=x64 --overwrite --verbose --icon=` + iconPath, { stdio: 'inherit' });
+  const electronPackagerCommand = `npx @electron/packager . Calculator --platform=${platformMap[platform]} --arch=x64 --overwrite --verbose ${iconPath ? '--icon=' + iconPath : ''}`;
+  console.log(`Running command: ${electronPackagerCommand}`);
+  execSync(electronPackagerCommand, { stdio: 'inherit' });
 
   console.log('Build and packaging complete!');
 } catch (error) {
