@@ -1,5 +1,5 @@
 @page
-@model CalculatorApp.Pages.IndexModel
+@model CalculatorAppDotNet.Pages.IndexModel
 @{
     ViewData["Title"] = "Calculator";
 }
@@ -11,42 +11,43 @@
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
-<body onload="initCalculator()">
+<body>
     <div class="calculator">
-        <input type="text" id="display" disabled />
+        <form method="post">
+            @Html.AntiForgeryToken()
+            <input type="text" name="display" id="display" value="@Model.Display" disabled />
 
-        <div class="buttons">
-            <button onclick="memoryAdd()">M+</button>
-            <button onclick="memorySubtract()">M-</button>
-            <button onclick="memoryClear()">MRC</button>
-            <button class="span-two-column invisible-button"></button>
+            <div class="buttons">
+                <button type="submit" name="memoryAction" value="M+">M+</button>
+                <button type="submit" name="memoryAction" value="M-">M-</button>
+                <button type="submit" name="memoryAction" value="MRC">MRC</button>
+                <button class="span-two-column invisible-button"></button>
 
-            <button onclick="appendNumber('7')">7</button>
-            <button onclick="appendNumber('8')">8</button>
-            <button onclick="appendNumber('9')">9</button>
-            <button onclick="clearDisplay()">C</button>
-            <button onclick="clearAll()">AC</button>
+                <button type="submit" name="number" value="7">7</button>
+                <button type="submit" name="number" value="8">8</button>
+                <button type="submit" name="number" value="9">9</button>
+                <button type="submit" name="action" value="C">C</button>
+                <button type="submit" name="action" value="AC">AC</button>
 
-            <button onclick="appendNumber('4')">4</button>
-            <button onclick="appendNumber('5')">5</button>
-            <button onclick="appendNumber('6')">6</button>
-            <button onclick="appendOperation('*')">×</button>
-            <button onclick="appendOperation('/')">÷</button>
+                <button type="submit" name="number" value="4">4</button>
+                <button type="submit" name="number" value="5">5</button>
+                <button type="submit" name="number" value="6">6</button>
+                <button type="submit" name="operation" value="*">×</button>
+                <button type="submit" name="operation" value="/">÷</button>
 
-            <button onclick="appendNumber('1')">1</button>
-            <button onclick="appendNumber('2')">2</button>
-            <button onclick="appendNumber('3')">3</button>
-            <button onclick="appendOperation('+')" class="span-two-row">+</button>
-            <button onclick="appendOperation('-')">-</button>
+                <button type="submit" name="number" value="1">1</button>
+                <button type="submit" name="number" value="2">2</button>
+                <button type="submit" name="number" value="3">3</button>
+                <button type="submit" name="operation" value="+" class="span-two-row">+</button>
+                <button type="submit" name="operation" value="-">-</button>
 
-            <button onclick="appendNumber('0')">0</button>
-            <button onclick="appendNumber('00')">00</button>
+                <button type="submit" name="number" value="0">0</button>
+                <button type="submit" name="number" value="00">00</button>
 
-            <button onclick="appendOperation('.')">.</button>
-            <button onclick="calculateResult()">=</button>
-        </div>
+                <button type="submit" name="operation" value=".">.</button>
+                <button type="submit" name="calculate" value="=">=</button>
+            </div>
+        </form>
     </div>
-
-    <script src="~/js/site.js"></script>
 </body>
 </html>
