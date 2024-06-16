@@ -59,14 +59,24 @@ try {
   // Run electron-packager for the detected platform
   console.log(`Packaging for ${platformMap[platform]}...`);
 
+  // Map Node.js platform to electron-packager platform
+  const iconPathMap = {
+    win32: path.join(__dirname, 'assets', 'icon.ico'),
+    darwin: path.join(__dirname, 'assets', 'icon.icns'),
+    linux: path.join(__dirname, 'assets', 'icon.png')
+  };
+  const iconPath = iconPathMap[platform];
+  console.log(`Using icon file: ${iconPath}`);
+
   // Check if icon file exists
-  const iconPath = path.join(__dirname, 'assets', 'icon.ico');
   if (!fs.existsSync(iconPath)) {
     console.warn('Warning: icon.ico does not exist. The application will use the Electron default icon.');
   } else {
     console.log('Using custom icon.ico for the application...');
   }
-  execSync(`npx electron-packager . Calculator --platform=${platformMap[platform]} --arch=x64 --overwrite --verbose --icon=../assets/icon.ico`, { stdio: 'inherit' });
+
+  // Run electron-packager
+  execSync(`npx electron-packager . Calculator --platform=${platformMap[platform]} --arch=x64 --overwrite --verbose --icon=` + iconPath, { stdio: 'inherit' });
 
   console.log('Build and packaging complete!');
 } catch (error) {
