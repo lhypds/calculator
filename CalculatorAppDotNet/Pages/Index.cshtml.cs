@@ -48,6 +48,7 @@ namespace CalculatorAppDotNet.Pages
             Right = currentRight ?? null;
             Result = currentResult ?? null;
 
+            // I. Handle number input
             if (!string.IsNullOrEmpty(number))
             {
                 _logger.LogInformation("Number Input: {number}", number);
@@ -58,19 +59,7 @@ namespace CalculatorAppDotNet.Pages
                     return;
                 }
 
-                if (Display == "0")
-                {
-                    Display = number;
-                }
-                else if (Display == "Error")
-                {
-                    Display = number;
-                }
-                else if (IsOperation(Display.Trim()))
-                {
-                    Display = number;
-                }
-                else if (Left != null && Operation != null && Right == null)
+                if (Display == "0" || Display == "Error" || IsOperation(Display.Trim()) || (Left != null && Operation != null && Right == null))
                 {
                     Display = number;
                 }
@@ -103,6 +92,7 @@ namespace CalculatorAppDotNet.Pages
                 }
             }
 
+            // II. Handle operation input
             if (!string.IsNullOrEmpty(operation))
             {
                 _logger.LogInformation("Operation Input: {operation}", operation);
@@ -154,29 +144,23 @@ namespace CalculatorAppDotNet.Pages
                 }
             }
 
+            // III. Handle action input
             if (!string.IsNullOrEmpty(action))
             {
                 _logger.LogInformation("Action Input: {action}", action);
 
                 if (action == "C")
                 {
-                    Display = "0";
-                    Left = "0";
-                    Operation = null;
-                    Right = null;
-                    Result = null;
+                    ResetCalculator();
                 }
                 else if (action == "AC")
                 {
-                    Display = "0";
-                    Left = "0";
-                    Operation = null;
-                    Right = null;
-                    Result = null;
+                    ResetCalculator();
                     memory = null;
                 }
             }
 
+            // IV. Handle memory action input
             if (!string.IsNullOrEmpty(memoryAction))
             {
                 _logger.LogInformation("MemoryAction Input: {memoryAction}", memoryAction);
@@ -198,6 +182,7 @@ namespace CalculatorAppDotNet.Pages
                 }
             }
 
+            // V. Handle calculate input
             if (!string.IsNullOrEmpty(calculate))
             {
                 _logger.LogInformation("Calculate Input: {calculate}", calculate);
@@ -247,6 +232,15 @@ namespace CalculatorAppDotNet.Pages
 
             _logger.LogInformation("Calculate result: {input} = {value}", input, value);
             return result;
+        }
+
+        private void ResetCalculator()
+        {
+            Display = "0";
+            Left = "0";
+            Operation = null;
+            Right = null;
+            Result = null;
         }
     }
 }
