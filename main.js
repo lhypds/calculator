@@ -17,7 +17,6 @@ function createWindow() {
       contextIsolation: false
     },
     frame: false,  // No frame to make the whole window draggable
-    icon: path.join(__dirname, 'build/icons/icon.png')
   });
 
   // Load the URL served by the .NET backend
