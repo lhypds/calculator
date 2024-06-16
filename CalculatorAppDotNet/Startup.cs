@@ -20,6 +20,7 @@ namespace CalculatorAppDotNet
             services.AddRazorPages();
             services.AddAntiforgery(options => options.HeaderName = "X-CSRF-TOKEN");
             services.AddSession();
+            services.AddHealthChecks(); // Add health checks
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -46,6 +47,7 @@ namespace CalculatorAppDotNet
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
+                endpoints.MapHealthChecks("/health");  // health check endpoint
             });
         }
     }
