@@ -76,7 +76,7 @@ try {
   }
 
   // Run electron-packager
-  execSync(`npx electron-packager . Calculator --platform=${platformMap[platform]} --arch=x64 --overwrite --verbose --icon=` + iconPath, { stdio: 'inherit' });
+  execSync(`npx @electron/packager . Calculator --platform=${platformMap[platform]} --arch=x64 --overwrite --verbose --icon=` + iconPath, { stdio: 'inherit' });
 
   console.log('Build and packaging complete!');
 } catch (error) {

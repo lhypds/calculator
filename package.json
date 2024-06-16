@@ -11,8 +11,8 @@
   "author": "Heyang Liu <lhypds@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "@electron/packager": "^18.3.2",
     "concurrently": "^6.2.1",
-    "electron": "^31.0.1",
-    "electron-packager": "^17.1.2"
+    "electron": "^31.0.1"
   }
 }
