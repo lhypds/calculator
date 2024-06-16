@@ -15,7 +15,8 @@
     <div class="calculator">
         <form method="post">
             @Html.AntiForgeryToken()
-            <input type="text" name="display" id="display" value="@Model.Display" disabled />
+            <input type="hidden" name="currentDisplay" value="@Model.Display" />
+            <input type="text" id="display" value="@Model.Display" disabled />
 
             <div class="buttons">
                 <button type="submit" name="memoryAction" value="M+">M+</button>

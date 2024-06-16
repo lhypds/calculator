@@ -8,7 +8,7 @@ namespace CalculatorAppDotNet.Pages
     {
         [BindProperty]
         public string Display { get; set; }
-        
+
         private static decimal? memory;
 
         public void OnGet()
@@ -17,8 +17,11 @@ namespace CalculatorAppDotNet.Pages
         }
 
         [ValidateAntiForgeryToken]
-        public void OnPost(string number, string operation, string action, string calculate, string memoryAction)
+        public void OnPost(string number, string operation, string action, string calculate, string memoryAction, string currentDisplay)
         {
+            // Preserve the current display value
+            Display = currentDisplay;
+
             if (!string.IsNullOrEmpty(number))
             {
                 Display += number;
@@ -44,8 +47,7 @@ namespace CalculatorAppDotNet.Pages
 
             if (!string.IsNullOrEmpty(memoryAction))
             {
-                decimal currentValue;
-                if (decimal.TryParse(Display, out currentValue))
+                if (decimal.TryParse(Display, out decimal currentValue))
                 {
                     if (memoryAction == "M+")
                     {
