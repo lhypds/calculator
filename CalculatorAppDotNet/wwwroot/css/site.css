@@ -6,15 +6,16 @@ body {
     height: 100vh;
     margin: 0;
     background-color: #f0f0f0;
+    -webkit-app-region: drag;  /* Makes the entire body draggable */
 }
 
 .calculator {
-    width: 320px;
+    width: 400px;
     background-color: #fff;
     padding: 20px;
-    border-radius: 10px;
-    border: 2px solid #ddd;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* border-radius: 10px; */
+    /* border: 2px solid #ddd; */
+    /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
 }
 
 #display {
@@ -29,7 +30,7 @@ body {
 
 .buttons {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 10px;
 }
 
@@ -45,26 +46,23 @@ button {
     display: flex;
     justify-content: center;
     align-items: center;
+    -webkit-app-region: no-drag;  /* Excludes the button from dragging */
 }
 
 button:active {
     background-color: #e0e0e0;
 }
 
-button:nth-of-type(4n) {
-    background-color: #FFA500; /* Orange background for operation buttons */
-    color: white;
+button.span-two-row {
+    grid-row: span 2;
+    height: 150px;
 }
 
-button:nth-of-type(4n):active {
-    background-color: #FF8C00; /* Darker shade for active state of operation buttons */
+button.span-two-column {
+    grid-column: span 2;
+    width: 150px;
 }
 
-button:nth-last-of-type(1) {
-    background-color: #008000; /* Green background for equal button */
-    color: white;
-}
-
-button:nth-last-of-type(1):active {
-    background-color: #006400; /* Darker shade for active state of equal button */
+button.invisible-button {
+    visibility: hidden;
 }

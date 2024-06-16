@@ -6,6 +6,7 @@ namespace CalculatorApp.Pages
     {
         public void OnGet()
         {
+            
         }
     }
 }

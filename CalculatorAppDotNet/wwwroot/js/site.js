@@ -2,8 +2,16 @@ let memory = 0;
 let currentOperation = '';
 let displayValue = '';
 
+
+function initCalculator() {
+    displayValue = '0';
+    updateDisplay();
+    memory = 0;
+    currentOperation = '';
+}
+
 function clearDisplay() {
-    displayValue = '';
+    displayValue = '0';
     updateDisplay();
 }
 
@@ -12,8 +20,18 @@ function updateDisplay() {
 }
 
 function appendNumber(number) {
-    displayValue += number;
-    updateDisplay();
+    // Limit the number of characters in the display to 20
+    if (displayValue.length < 20) {
+        if (displayValue === '0') {
+            if (number === '00') {
+                number = '0';
+            }
+            displayValue = number;
+        } else {
+            displayValue += number;
+        }
+        updateDisplay();
+    }
 }
 
 function appendOperation(operation) {
@@ -45,4 +63,10 @@ function memorySubtract() {
 function memoryClear() {
     displayValue = memory.toString();
     updateDisplay();
+}
+
+function clearAll() {
+    memory = 0;
+    currentOperation = '';
+    clearDisplay();
 }
