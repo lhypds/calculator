@@ -22,6 +22,10 @@ Build
 Run
 ---
 
+Method 1. `npm start`  
+
+Method 2. Build the executable.  
 The built executables are located in the publish folder, e.g., Calculator-win32-x64.  
 On windows, run `Calculator.exe`  
+
 Press, `ESC` to quit application.  
