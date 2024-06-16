@@ -8,11 +8,34 @@
     "electron": "npx electron .",
     "build": "node build.js"
   },
+  "author": "Heyang Liu <lhypds@gmail.com>",
+  "license": "MIT",
   "dependencies": {
     "electron": "^13.1.7"
   },
   "devDependencies": {
     "concurrently": "^6.2.1",
+    "electron-builder": "^24.13.3",
     "electron-packager": "^17.1.2"
+  },
+  "build": {
+    "appId": "com.gcc3.calculator",
+    "mac": {
+      "icon": "build/icons/icon.icns"
+    },
+    "win": {
+      "icon": "build/icons/icon.ico"
+    },
+    "linux": {
+      "icon": "build/icons"
+    },
+    "files": [
+      "build/**/*",
+      "main.js",
+      "index.html"
+    ],
+    "directories": {
+      "buildResources": "build"
+    }
   }
 }
