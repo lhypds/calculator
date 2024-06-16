@@ -10,11 +10,9 @@
   },
   "author": "Heyang Liu <lhypds@gmail.com>",
   "license": "MIT",
-  "dependencies": {
-    "electron": "^13.1.7"
-  },
   "devDependencies": {
     "concurrently": "^6.2.1",
+    "electron": "^31.0.1",
     "electron-packager": "^17.1.2"
   }
 }

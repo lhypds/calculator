@@ -21,11 +21,11 @@ try {
     throw new Error(`Unsupported platform: ${platform}`);
   }
 
-  // Step 1: Publish the .NET application
+  // Publish the .NET application
   console.log('Publishing .NET application...');
   execSync('dotnet publish ./CalculatorAppDotNet -c Release -o ./publish/CalculatorAppDotNet', { stdio: 'inherit' });
 
-  // Step 2: Copy necessary files to the publish directory
+  // Copy necessary files to the publish directory
   filesToCopy.forEach(file => {
     const srcPath = path.join(__dirname, file);
     const destPath = path.join(__dirname, 'publish', file);
@@ -38,18 +38,18 @@ try {
     }
   });
 
-  // Step 3: Copy the custom package.json to the publish directory
+  // Copy the custom package.json to the publish directory
   const customPackageJsonPath = path.join(__dirname, 'publish-package.json');
   const publishPackageJsonPath = path.join(__dirname, 'publish', 'package.json');
   console.log('Copying custom package.json to publish directory...');
   fs.copyFileSync(customPackageJsonPath, publishPackageJsonPath);
 
-  // Step 4: Verify package.json
+  // Verify package.json
   console.log('Verifying package.json...');
   const packageJson = require(publishPackageJsonPath);
   console.log('package.json:', packageJson);
 
-  // Step 5: Run electron-packager
+  // Run electron-packager
   console.log('Packaging Electron application...');
 
   // Change the working directory to the 'publish' directory
@@ -58,7 +58,15 @@ try {
 
   // Run electron-packager for the detected platform
   console.log(`Packaging for ${platformMap[platform]}...`);
-  execSync(`npx electron-packager . Calculator --platform=${platformMap[platform]} --arch=x64 --overwrite --verbose`, { stdio: 'inherit' });
+
+  // Check if icon file exists
+  const iconPath = path.join(__dirname, 'assets', 'icon.ico');
+  if (!fs.existsSync(iconPath)) {
+    console.warn('Warning: icon.ico does not exist. The application will use the Electron default icon.');
+  } else {
+    console.log('Using custom icon.ico for the application...');
+  }
+  execSync(`npx electron-packager . Calculator --platform=${platformMap[platform]} --arch=x64 --overwrite --verbose --icon=../assets/icon.ico`, { stdio: 'inherit' });
 
   console.log('Build and packaging complete!');
 } catch (error) {
