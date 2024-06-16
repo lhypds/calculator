@@ -1,0 +1,18 @@
+{
+  "name": "calculator",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "concurrently \"npm:server\" \"npm:electron\"",
+    "server": "dotnet run --project ./CalculatorAppDotNet",
+    "electron": "npx electron .",
+    "build": "node build.js"
+  },
+  "dependencies": {
+    "electron": "^13.1.7"
+  },
+  "devDependencies": {
+    "concurrently": "^6.2.1",
+    "electron-packager": "^17.1.2"
+  }
+}
