@@ -130,6 +130,13 @@ namespace CalculatorAppDotNet.Pages
                     // Right is empty, opreation is not empty
                     // Replace operation
                     Operation = operation;
+
+                    // Replace display operation if the current display is an operation
+                    if (IsOperation(Display.Trim()))
+                    {
+                        Display = Operation;
+                    }
+
                     _logger.LogInformation("Replace Operation: {Operation}", Operation);
                 }
                 else if (Left != null && Operation == null && Right == null)
