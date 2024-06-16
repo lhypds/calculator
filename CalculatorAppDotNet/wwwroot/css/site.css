@@ -1,0 +1,70 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+}
+
+.calculator {
+    width: 320px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    border: 2px solid #ddd;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#display {
+    width: calc(100% - 20px);
+    font-size: 2em;
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: right; /* Right align text in the display */
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+button {
+    padding: 20px;
+    font-size: 1.5em;
+    border: none;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 70px; /* Ensures all buttons have the same width */
+    height: 70px; /* Ensures all buttons have the same height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+button:active {
+    background-color: #e0e0e0;
+}
+
+button:nth-of-type(4n) {
+    background-color: #FFA500; /* Orange background for operation buttons */
+    color: white;
+}
+
+button:nth-of-type(4n):active {
+    background-color: #FF8C00; /* Darker shade for active state of operation buttons */
+}
+
+button:nth-last-of-type(1) {
+    background-color: #008000; /* Green background for equal button */
+    color: white;
+}
+
+button:nth-last-of-type(1):active {
+    background-color: #006400; /* Darker shade for active state of equal button */
+}
