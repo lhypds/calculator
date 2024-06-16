@@ -17,24 +17,60 @@ namespace CalculatorAppDotNet.Pages
         [BindProperty]
         public string Display { get; set; }
 
+        [BindProperty]
+        public string Left { get; set; }
+
+        [BindProperty]
+        public string Operation { get; set; }
+
+        [BindProperty]
+        public string Right { get; set; }
+
+        [BindProperty]
+        public string Result { get; set; }
+
         private static decimal? memory;
 
         public void OnGet()
         {
             Display = "0";
+            Left = "0";
         }
 
         [ValidateAntiForgeryToken]
-        public void OnPost(string number, string operation, string action, string calculate, string memoryAction, string currentDisplay)
+        public void OnPost(string number, string operation, string action, string calculate, string memoryAction, 
+                           string currentDisplay, string currentLeft, string currentOperation, string currentRight, string currentResult)
         {
             // Preserve the current display value
             Display = currentDisplay;
+            Left = currentLeft ?? null;
+            Operation = currentOperation ?? null;
+            Right = currentRight ?? null;
+            Result = currentResult ?? null;
 
             if (!string.IsNullOrEmpty(number))
             {
-                _logger.LogInformation("Number: {number}", number);
+                _logger.LogInformation("Number Input: {number}", number);
+
+                // Prevent multiple decimal points
+                if (number == "." && Display.Contains("."))
+                {
+                    return;
+                }
 
                 if (Display == "0")
+                {
+                    Display = number;
+                }
+                else if (Display == "Error")
+                {
+                    Display = number;
+                }
+                else if (IsOperation(Display.Trim()))
+                {
+                    Display = number;
+                }
+                else if (Left != null && Operation != null && Right == null)
                 {
                     Display = number;
                 }
@@ -42,37 +78,101 @@ namespace CalculatorAppDotNet.Pages
                 {
                     Display += number;
                 }
+
+                // Remove leading zero
+                if (Display.StartsWith("0") && !Display.Contains("."))
+                {
+                    Display = Display.TrimStart('0');
+                    if (string.IsNullOrEmpty(Display))
+                    {
+                        Display = "0";
+                    }
+                }
+
+                if (string.IsNullOrEmpty(Operation))
+                {
+                    // Input left
+                    Left = Display;
+                    _logger.LogInformation("Set Left: {Left}", Left);
+                }
+                else if (!string.IsNullOrEmpty(Operation) && Left != null)
+                {
+                    // Input right
+                    Right = Display;
+                    _logger.LogInformation("Set Right: {Right}", Right);
+                }
             }
 
             if (!string.IsNullOrEmpty(operation))
             {
-                _logger.LogInformation("Operation: {operation}", operation);
-
-                // Add operation only if the last character is not an operation
-                if (!string.IsNullOrEmpty(Display) && !IsOperation(Display.Trim()[^1]))
+                _logger.LogInformation("Operation Input: {operation}", operation);
+                if (Display == "Error")
                 {
-                    Display += $" {operation} ";
+                    return;
+                }
+
+                // All set, calculate the result
+                if (Left != null && !string.IsNullOrEmpty(Operation) && Right != null)
+                {
+                    // Already has operation, calculate the result
+                    Right = Display;
+
+                    _logger.LogInformation("Left: {Left}, Operation: {Operation}, Right: {Right}", Left, Operation, Right);
+                    Display = Calculate($"{Left}{Operation}{Right}").ToString();
+
+                    Operation = operation;
+                    Left = Display;
+                    Right = null;
+                    _logger.LogInformation("Set Left: {Left}, Set Operation: {Operation}, Set Right: {Right}", Left, Operation, Right);
+                }
+                else if (Left != null && Operation != null && Right == null)
+                {
+                    // Right is empty, opreation is not empty
+                    // Replace operation
+                    Operation = operation;
+                    _logger.LogInformation("Replace Operation: {Operation}", Operation);
+                }
+                else if (Left != null && Operation == null && Right == null)
+                {
+                    // Opration is empty
+                    // Set operation
+                    Display = operation;
+                    Operation = operation;
+                    _logger.LogInformation("Set Operation: {Operation}", Operation);
+                }
+                else if (Left == null && Operation == null && Right == null)
+                {
+                    // Left will never be null
+                    Display = "Error";
                 }
             }
 
             if (!string.IsNullOrEmpty(action))
             {
-                _logger.LogInformation("Action: {action}", action);
+                _logger.LogInformation("Action Input: {action}", action);
 
                 if (action == "C")
                 {
                     Display = "0";
+                    Left = "0";
+                    Operation = null;
+                    Right = null;
+                    Result = null;
                 }
                 else if (action == "AC")
                 {
                     Display = "0";
+                    Left = "0";
+                    Operation = null;
+                    Right = null;
+                    Result = null;
                     memory = null;
                 }
             }
 
             if (!string.IsNullOrEmpty(memoryAction))
             {
-                _logger.LogInformation("MemoryAction: {memoryAction}", memoryAction);
+                _logger.LogInformation("MemoryAction Input: {memoryAction}", memoryAction);
 
                 if (decimal.TryParse(Display, out decimal currentValue))
                 {
@@ -93,15 +193,28 @@ namespace CalculatorAppDotNet.Pages
 
             if (!string.IsNullOrEmpty(calculate))
             {
-                _logger.LogInformation("Calculate: {calculate}", calculate);
+                _logger.LogInformation("Calculate Input: {calculate}", calculate);
 
                 try
                 {
-                    Display = Calculate(Display).ToString();
+                    _logger.LogInformation("Left: {Left}, Operation: {Operation}, Right: {Right}", Left, Operation, Right);
+                    Display = Calculate($"{Left}{Operation}{Right}").ToString();
+
+                    Left = Display;
+                    Operation = null;
+                    Right = null;
+                    _logger.LogInformation("Set Left: {Left}, Set Operation: {Operation}, Set Right: {Right}", Left, Operation, Right);
                 }
                 catch (Exception)
                 {
                     Display = "Error";
+
+                    // Reset the calculator
+                    Left = "0";
+                    Operation = null;
+                    Right = null;
+                    Result = null;
+                    memory = null;
                 }
             }
 
@@ -112,16 +225,21 @@ namespace CalculatorAppDotNet.Pages
             }
         }
 
-        private bool IsOperation(char c)
+        private bool IsOperation(string str)
         {
-            return c == '+' || c == '-' || c == '*' || c == '/';
+            str = str.Trim().Replace("×", "*").Replace("÷", "/");
+            return str == "+" || str == "-" || str == "*" || str == "/";
         }
 
         private decimal Calculate(string input)
         {
             var dataTable = new System.Data.DataTable();
             var value = dataTable.Compute(input.Replace("×", "*").Replace("÷", "/"), "");
-            return Convert.ToDecimal(value);
+
+            var result = Convert.ToDecimal(value);
+
+            _logger.LogInformation("Calculate result: {input} = {value}", input, value);
+            return result;
         }
     }
 }

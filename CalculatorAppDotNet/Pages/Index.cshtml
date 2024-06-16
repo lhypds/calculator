@@ -16,6 +16,11 @@
         <form method="post">
             @Html.AntiForgeryToken()
             <input type="hidden" name="currentDisplay" value="@Model.Display" />
+            <input type="hidden" name="currentLeft" value="@Model.Left" />
+            <input type="hidden" name="currentOperation" value="@Model.Operation" />
+            <input type="hidden" name="currentRight" value="@Model.Right" />
+            <input type="hidden" name="currentResult" value="@Model.Result" />
+
             <input type="text" id="display" value="@Model.Display" disabled />
 
             <div class="buttons">
