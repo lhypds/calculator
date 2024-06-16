@@ -42,12 +42,6 @@ async function tryConnectToDotNetBackend() {
 
 app.whenReady().then(() => {
   intervalId = setInterval(tryConnectToDotNetBackend, 500);
-
-  // Set a timeout to stop trying after 10 seconds
-  setTimeout(() => {
-    clearInterval(intervalId);
-    createWindow();
-  },10000);
 });
 
 app.on('window-all-closed', () => {
